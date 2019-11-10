@@ -1,0 +1,11 @@
+<# in.txtをインプットにファイルを検索
+ #>
+$i=1
+foreach ($l in Get-Content in.txt) {
+    Write-Host $i : $l
+    $fulpathfile = Get-ChildItem -Recurse "C:/temp" | ?{ $_.Length -ne $null } | Select-Object $l
+    Write-Output $fulpathfile | Add-Content out.txt -Encoding Default
+    $i++
+}
+
+Get-Content out.txt
