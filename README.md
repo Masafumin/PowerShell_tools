@@ -1,7 +1,7 @@
 Windwos2012R2で動作確認済み
 
 # 事前準備
-C:\tempに等に事前に資材を置くこと
+C:\temp配下へ事前に資材を置くこと
 
 # 構造
 ExecPowershell.batがGoKBPatch.psを呼び出し、KBファイルのフルパスを取得しKB_install.batに渡す
