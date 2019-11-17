@@ -1,11 +1,28 @@
-<# in.txt繧偵う繝ｳ繝励ャ繝医↓繝輔ぃ繧､繝ｫ繧呈､懃ｴ｢
- #>
+# 事前準備として当てたいKBファイル名をin.txtとしてインプットにファイルを作成しておくこと
+# その際、1行に1ファイル名で改行すること
+
+# インプットファイル名
+$inputFile = "C:＼temp＼in.txt"
+
+# KBファイルの配置先（再帰的に検索）
+$searchDir = "C:＼temp"
+
+# インプットファイル名から検索したフルパスファイル名
+$outputFile = "C:＼temp＼out.txt"
+
+
 $i=1
-foreach ($l in Get-Content in.txt) {
-    Write-Host $i : $l
-    $fulpathfile = Get-ChildItem -Recurse "C:/temp" | ?{ $_.Length -ne $null } | Select-Object $l
-    Write-Output $fulpathfile | Add-Content out.txt -Encoding Default
+foreach ($l in Get-Content $inputFile) {
+
+    $regFile = "^" +  $l + "$"
+    $fulpathFile = Get-ChildItem -Recurse $searchDir  -Filter $regFile |  {? { ! $_.PSIsContainer } | % { $_.FullName }
+    Write-Output $fulpathFile | Add-Content $outputFile -Encoding Default
+
+    # フルパスを元にmsiファイルをサイレントインストールする
+#    Write-Host "bat実行開始"
+    Start-Process KB_install.bat -ArgumentList $fulpathFile -Wait
+#    Write-Host "bat実行終了"
+    
     $i++
 }
 
-Get-Content out.txt
